@@ -1,0 +1,26 @@
+{
+  "name": "arraypress/register-custom-columns-plugin",
+  "description": "A plugin demonstrating the usage of the WordPress Register Custom Columns Library with various examples.",
+  "homepage": "https://github.com/arraypress/register-custom-columns-plugin/",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "David Sherlock",
+      "homepage": "https://arraypress.com/"
+    }
+  ],
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  },
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "arraypress/register-custom-columns": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
