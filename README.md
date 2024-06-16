@@ -1,6 +1,6 @@
 # Register Custom Columns Example Plugin
 
-This plugin demonstrates how to use register custom columns in a plugin.
+This plugin demonstrates how to use register custom columns library in a plugin.
 
 ## Installation
 
@@ -48,7 +48,7 @@ This plugin is an example implementation of the ArrayPress Register Custom Colum
 5. **User Columns**
     - **Points:** Adds a points column for users. This column is sortable and supports inline editing with a number input field.
 
-6. **EDD Columns**
+6. **Easy Digital Downloads Columns**
     - **Discounts:**
         - **Savings:** Adds a savings column after the use count column. This displays the total savings for the discount.
         - **Earnings:** Adds an earnings column after the use count column. This displays the total earnings for the discount.
