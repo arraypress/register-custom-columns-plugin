@@ -3,9 +3,14 @@
  * Plugin Name:       Register Custom Columns Plugin
  * Plugin URI:        https://github.com/arraypress/register-custom-columns-plugin
  * Description:       A plugin demonstrating the usage of the WordPress Register Custom Columns Library with various
- * examples. Author:            ArrayPress Author URI:        https://arraypress.com License:           GNU General
- * Public License v2 or later License URI:       https://www.gnu.org/licenses/gpl-2.0.html Requires PHP:      7.4
- * Requires at least: 6.5.4 Version:           1.0.0
+ * Author:            ArrayPress
+ * Author URI:        https://arraypress.com
+ * License:           GNU General Public License v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       register-custom-columns-plugin
+ * Requires PHP:      7.4
+ * Requires at least: 6.5.4
+ * Version:           1.0.0
  */
 
 declare( strict_types=1 );
@@ -19,16 +24,30 @@ use function ArrayPress\RegisterCustomColumns\register_media_columns;
 use function ArrayPress\RegisterCustomColumns\register_user_columns;
 use ArrayPress\RegisterCustomColumns\Utils\ColumnHelper;
 
+/**
+ * Autoload dependencies.
+ */
 require_once __DIR__ . '/vendor/autoload.php';
 
+/**
+ * Check if Easy Digital Downloads is active and include EDD specific columns.
+ */
+if ( class_exists( 'Easy_Digital_Downloads' ) ) {
+	require_once __DIR__ . '/easy-digital-downloads.php';
+}
+
 // Register Post Columns
+
+/**
+ * Define custom columns for posts and pages.
+ *
+ * @var array $custom_post_columns Configuration array for custom post columns.
+ */
 $custom_post_columns = [
 	'thumbnail'   => [
 		'label'               => '', // Left blank on purpose,
 		'display_callback'    => function ( $value, $post_id, $column ) {
-			$thumbnail_id = get_post_thumbnail_id( $post_id );
-
-			return ColumnHelper::image_thumbnail( $thumbnail_id, [ 64, 64 ] );
+			return ColumnHelper::post_thumbnail( $post_id, [ 64, 64 ] );
 		},
 		'position'            => 'before:title',
 		'permission_callback' => function () {
@@ -57,6 +76,12 @@ $custom_post_columns = [
 register_post_columns( [ 'post', 'page' ], $custom_post_columns );
 
 // Register Comment Columns
+
+/**
+ * Define custom columns for comments.
+ *
+ * @var array $custom_comment_columns Configuration array for custom comment columns.
+ */
 $custom_comment_columns = [
 	'comment_word_count' => [
 		'label'               => __( 'Word Count', 'text-domain' ),
@@ -75,6 +100,12 @@ $custom_comment_columns = [
 register_comment_columns( $custom_comment_columns );
 
 // Register Taxonomy Columns
+
+/**
+ * Define custom columns for taxonomies.
+ *
+ * @var array $custom_taxonomy_columns Configuration array for custom taxonomy columns.
+ */
 $custom_taxonomy_columns = [
 	'color'            => [
 		'label'               => __( 'Color', 'text-domain' ),
@@ -115,6 +146,12 @@ $custom_taxonomy_columns = [
 register_taxonomy_columns( [ 'category', 'post_tag' ], $custom_taxonomy_columns );
 
 // Register Media Library Columns
+
+/**
+ * Define custom columns for media library.
+ *
+ * @var array $custom_media_columns Configuration array for custom media columns.
+ */
 $custom_media_columns = [
 	'file_size'      => [
 		'label'               => __( 'File Size', 'text-domain' ),
@@ -129,9 +166,7 @@ $custom_media_columns = [
 	'file_type'      => [
 		'label'               => __( 'File Type', 'text-domain' ),
 		'display_callback'    => function ( $value, $attachment_id, $column ) {
-			$file_type = ColumnHelper::attachment_file_type( $attachment_id );
-
-			return esc_html( $file_type );
+			return ColumnHelper::attachment_file_type( $attachment_id );
 		},
 		'position'            => 'after:file_size',
 		'permission_callback' => function () {
@@ -141,9 +176,7 @@ $custom_media_columns = [
 	'file_extension' => [
 		'label'               => __( 'File Extension', 'text-domain' ),
 		'display_callback'    => function ( $value, $attachment_id, $column ) {
-			$file_extension = ColumnHelper::attachment_file_extension( $attachment_id );
-
-			return esc_html( $file_extension ?? __( 'N/A', 'text-domain' ) );
+			return ColumnHelper::attachment_file_extension( $attachment_id );
 		},
 		'position'            => 'after:file_type',
 		'permission_callback' => function () {
@@ -154,6 +187,12 @@ $custom_media_columns = [
 register_media_columns( $custom_media_columns );
 
 // Register User Columns
+
+/**
+ * Define custom columns for users.
+ *
+ * @var array $custom_user_columns Configuration array for custom user columns.
+ */
 $custom_user_columns = [
 	'points' => [
 		'label'               => __( 'Points', 'text-domain' ),
@@ -163,10 +202,11 @@ $custom_user_columns = [
 		'inline_edit'         => true,
 		'inline_attributes'   => [
 			'type'        => 'number',
-			'placeholder' => __( 'Points', 'text-domain' ),
+			'placeholder' => __( 'Enter number of points', 'text-domain' ),
+			'style'       => 'min-width: 128px'
 		],
 		'display_callback'    => function ( $value, $user_id, $column ) {
-			ColumnHelper::format_numeric( $value );
+			return ColumnHelper::format_numeric( $value );
 		},
 		'permission_callback' => function () {
 			return current_user_can( 'edit_users' );
